@@ -1,0 +1,22 @@
+version: "3.4"
+
+services:
+  generate_pb_go:
+    image: protoc_gen_go
+    build:
+      context: ../
+      target: protoc_gen_go
+      dockerfile: ./developments/proto.Dockerfile
+    volumes:
+      - "../api/:/api/"
+      - "../developments/gen-proto.sh:/developments/gen-proto.sh"
+      - "../idl/:/idl/"
+      - "../docs:/docs/"
+    entrypoint: /developments/gen-proto.sh
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+    postgres:

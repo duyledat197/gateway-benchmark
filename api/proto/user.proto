@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package user;
+option go_package = "pb/;pb";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service UserService {
+  rpc GetUserByID(GetUserByIDRequest) returns (GetUserByIDResponse) {
+    option (google.api.http) = {
+      get : "/v1/users/{userID}"
+    };
+  };
+
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+    option (google.api.http) = {
+      post : "/v1/users",
+      body : "*"
+    };
+  };
+
+  rpc GetList(GetListUserRequest) returns (GetListUserResponse) {
+    option (google.api.http) = {
+      get : "/v1/users"
+    };
+  };
+
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+    option (google.api.http) = {
+      put : "/v1/users",
+      body : "*"
+    };
+  };
+}
+
+message GetUserByIDRequest { string userID = 1; }
+
+message GetUserByIDResponse { User data = 1; }
+
+message User {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  string team_id = 4;
+}
+
+message CreateUserRequest {
+  User user = 1;
+}
+
+message CreateUserResponse { bool success = 1; }
+
+message GetListUserRequest {
+  int32 offset = 1;
+  int32 limit = 2;
+}
+
+message GetListUserResponse {
+  repeated User data = 1;
+  int32 total = 2;
+}
+
+message UpdateUserRequest { User user = 1; }
+
+message UpdateUserResponse { bool success = 1; }
